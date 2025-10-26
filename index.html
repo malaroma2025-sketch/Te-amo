@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feliz cumpleaños, mi amor 🎉</title>
+<style>
+  :root{
+    --overlay: rgba(0,0,0,0.45);
+    --accent: #ff6b93;
+    --accent-dark: #e04578;
+    --glass: rgba(255,255,255,0.85);
+  }
+  html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#111;
+    color:#111;
+    overflow:hidden;
+  }
+  .bg {
+    position:fixed; inset:0;
+    background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px) brightness(.75);
+    transform: scale(1.02);
+    z-index:0;
+  }
+  .overlay{ position:fixed; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(8,0,20,0.25)); z-index:1; }
+  .card{
+    position:relative;
+    z-index:2;
+    width:min(980px,94vw);
+    max-width:980px;
+    border-radius:18px;
+    padding:26px;
+    box-sizing:border-box;
+    background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,255,255,0.78));
+    box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+    backdrop-filter: blur(6px) saturate(1.05);
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:20px;
+    align-items:center;
+  }
+  .left h1{ margin:0; font-size: clamp(28px, 4.2vw, 48px); color:var(--accent-dark); }
+  .left p.lead{ margin:12px 0 18px; font-size:18px; color:#222; line-height:1.45; }
+  .big-message{ background:var(--glass); padding:16px; border-radius:12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6); color:#111; max-height:360px; overflow:auto; }
+  .controls{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  .btn{
+    background:var(--accent); color:white; border:none; padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer;
+    box-shadow: 0 8px 20px rgba(228,69,120,0.18);
+  }
+  .btn.secondary{ background:transparent; color:var(--accent-dark); border:2px solid rgba(0,0,0,0.06); box-shadow:none; }
+  .right { display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+  .photo{
+    width:380px; height:320px; border-radius:12px; overflow:hidden; box-shadow:0 12px 30px rgba(2,6,23,0.4); border:6px solid rgba(255,255,255,0.6);
+    background-size:cover; background-position:center;
+  }
+  .countdown{
+    font-weight:700; background:rgba(255,255,255,0.9); padding:10px 16px; border-radius:12px; color:#111;
+    font-size:20px; box-shadow: 0 8px 20px rgba(2,6,23,0.08);
+  }
+  .final-msg{ margin-top:12px; font-weight:700; color:var(--accent-dark); }
+  #confetti-canvas{ position:fixed; inset:0; z-index:9999; pointer-events:none; }
+  .hearts{ position:fixed; inset:0; z-index:3; pointer-events:none; }
+  .heart{ position:absolute; font-size:26px; opacity:.12; transform: translateY(0); animation: float 5s ease-in-out infinite; }
+  @keyframes float{ 0%{ transform: translateY(0) } 50%{ transform: translateY(-18px) } 100%{ transform: translateY(0) } }
+  footer.small{ margin-top:14px; color:#333; font-size:13px; }
+  @media(max-width:900px){
+    .card{ grid-template-columns: 1fr; padding:18px; }
+    .photo{ width:100%; height:220px; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg" aria-hidden></div>
+  <div class="overlay" aria-hidden></div>
+
+  <div class="card" role="main" aria-label="Feliz cumpleaños">
+    <div class="left">
+      <h1>¡Feliz cumpleaños, mi amor! 🎉</h1>
+      <div class="lead">Feliz 18 vueltitas al sol, mi amor. Muy pronto estaré a tu ladito 💗</div>
+      <div class="big-message">
+        <p>Desde que te conocí, mi mundo se pintó de colores más intensos. Tú eres la prueba más bonita de que la vida tenía algo maravilloso guardado para mí. No hay nada más hermoso que ver cómo creces, cómo persigues tus pasiones y la forma en que me haces sentir amada. Gracias por llegar y por quedarte.</p>
+        <p>Hoy celebro tus 18 vueltitas al sol, mi amor, y el futuro inmenso que tienes por delante. Quiero estar en cada paso de este nuevo camino, siendo tu apoyo, tu cómplice y la persona que te recuerde lo valioso que eres.</p>
+      </div>
+      <div class="controls">
+        <button id="openSong" class="btn">Reproducir nuestra canción 🎵</button>
+        <button id="revealBtn" class="btn secondary">Revelar sorpresa</button>
+      </div>
+      <footer class="small">Abre esto exactamente a <strong>11:59 p.m.</strong> y espera 1 minuto para la sorpresa. Si el contador ya llegó a 00:00, pulsa <em>Revelar sorpresa</em>.</footer>
+    </div>
+
+    <div class="right">
+      <div id="photoBox" class="photo" style="background-image:url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80');" aria-hidden></div>
+      <div id="countdown" class="countdown">00:59</div>
+      <div class="final-msg" id="finalMsg"></div>
+    </div>
+  </div>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div class="hearts" aria-hidden>
+    <div class="heart" style="left:8%; top:12%;">💗</div>
+    <div class="heart" style="left:76%; top:20%; font-size:34px; opacity:.08;">💖</div>
+    <div class="heart" style="left:40%; top:72%; font-size:28px; opacity:.09;">💗</div>
+  </div>
+
+<script>
+(function(){
+  const YOU_TUBE_LINK = "https://youtu.be/yKez26lvTqI?si=GL0ZFB8TccnXaXd7";
+  const openSong = document.getElementById('openSong');
+  const revealBtn = document.getElementById('revealBtn');
+  const countdownEl = document.getElementById('countdown');
+  const finalMsg = document.getElementById('finalMsg');
+  const confettiCanvas = document.getElementById('confetti-canvas');
+
+  openSong.addEventListener('click', ()=> { window.open(YOU_TUBE_LINK, '_blank'); });
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function getTargetNextMinute(){
+    const now = new Date();
+    const target = new Date(now);
+    target.setSeconds(0);
+    target.setMilliseconds(0);
+    target.setMinutes(target.getMinutes()+1);
+    return target;
+  }
+
+  let target = getTargetNextMinute();
+
+  function updateCountdown(){
+    const now = new Date();
+    let diff = Math.max(0, target - now);
+    const s = Math.floor(diff/1000) % 60;
+    const m = Math.floor(diff/60000);
+    countdownEl.textContent = pad(m) + ':' + pad(s);
+    if (diff <= 0){
+      countdownEl.textContent = '00:00';
+      showFinal();
+    }
+  }
+
+  const interval = setInterval(updateCountdown, 250);
+  updateCountdown();
+
+  function showFinal(){
+    finalMsg.textContent = "¡Feliz 18 vueltitas al sol, mi amor. Muy pronto estaré a tu ladito 💗";
+    revealBtn.textContent = "¡Feliz cumple! 🎉";
+    launchConfetti(confettiCanvas);
+    clearInterval(interval);
+  }
+
+  revealBtn.addEventListener('click', showFinal);
+
+  function resizeCanvas(canvas){
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(canvas.clientWidth * dpr);
+    canvas.height = Math.floor(canvas.clientHeight * dpr);
+  }
+
+  function launchConfetti(canvas){
+    if(!canvas) return;
+    resizeCanvas(canvas);
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const particles = [];
+    const colors = ['#ff6b93','#ff9bb3','#ffd166','#6dd3ff','#b38bff'];
+    for(let i=0;i<140;i++){
+      particles.push({
+        x: Math.random()*W,
+        y: Math.random()*-H*0.6,
+        vx: (Math.random()-0.5)*6,
+        vy: Math.random()*5 + 2,
+        r: 6 + Math.random()*8,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        rot: Math.random()*360,
+        spin: (Math.random()-0.5)*0.4
+      });
+    }
+    let raf;
+    function frame(){
+      ctx.clearRect(0,0,W,H);
+      for(let p of particles){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.12;
+        p.rot += p.spin;
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r);
+        ctx.restore();
+      }
+      const alive = particles.filter(p=>p.y < H + 80);
+      if (alive.length === 0){
+        cancelAnimationFrame(raf);
+        ctx.clearRect(0,0,W,H);
+        return;
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    frame();
+    setTimeout(()=>{ particles.length=0; }, 8000);
+  }
+})();
+</script>
+</body>
+</html>
